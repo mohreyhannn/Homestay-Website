@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Homestay Nyaman</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/cover.css" />
+    <link rel="stylesheet" href="css/tentang.css" />
+    <link rel="stylesheet" href="css/kamar.css" />
+    <link rel="stylesheet" href="css/testimonial.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <!-- Loader -->
+    <div id="loader">
+      <div class="spinner"></div>
+    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold">Homestay</a>
+
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          id="hamburgerBtn"
+        >
+          <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <div class="nav-box">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="#cover">Home</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="#tentang">Tentang</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="#kamar">Kamar</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="#kontak">Kontak</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Cover Section -->
+    <section
+      id="cover"
+      class="cover-section reveal d-flex align-items-center text-center text-white"
+    >
+      <div class="container hero-content">
+        <h1 class="hero-title">Selamat Datang di Homestay Nyaman</h1>
+        <p class="hero-subtitle">
+          Tempat terbaik untuk istirahat dan menikmati liburan Anda dan Keluarga
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#booking" class="btn btn-primary btn-lg me-3"
+            >Booking Sekarang</a
+          >
+          <a href="#tentang" class="btn btn-outline-light btn-lg"
+            >Lihat Detail</a
+          >
+        </div>
+      </div>
+
+      <!-- Scroll Down Indicator -->
+      <div class="scroll-indicator">
+        <span></span>
+      </div>
+    </section>
+
+    <!-- Tentang Homestay -->
+    <section id="tentang" class="tentang-section reveal py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <!-- Gambar -->
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <div
+              id="tentangCarousel"
+              class="carousel slide tentang-img-premium"
+              data-bs-ride="carousel"
+              data-bs-interval="3500"
+            >
+              <!-- indikator -->
+              <div class="carousel-indicators">
+                <button
+                  type="button"
+                  data-bs-target="#tentangCarousel"
+                  data-bs-slide-to="0"
+                  class="active"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#tentangCarousel"
+                  data-bs-slide-to="1"
+                ></button>
+                <button
+                  type="button"
+                  data-bs-target="#tentangCarousel"
+                  data-bs-slide-to="2"
+                ></button>
+              </div>
+
+              <!-- gambar -->
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div class="image-wrapper">
+                    <img
+                      src="images/algamas.jpg"
+                      class="d-block w-100"
+                      alt="Homestay Algamas tampilan kamar nyaman"
+                    />
+                    <div class="image-overlay">
+                      <h5>Suasana Nyaman</h5>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="carousel-item">
+                  <div class="image-wrapper">
+                    <img
+                      src="images/samping.jpeg"
+                      class="d-block w-100"
+                      alt="Fasilitas homestay Algamas lengkap"
+                    />
+                    <div class="image-overlay">
+                      <h5>Fasilitas Lengkap</h5>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="carousel-item">
+                  <div class="image-wrapper">
+                    <img
+                      src="images/halaman.jpeg"
+                      class="d-block w-100"
+                      alt="Lingkungan homestay Algamas tenang"
+                    />
+                    <div class="image-overlay">
+                      <h5>Lingkungan Tenang</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- tombol kiri -->
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#tentangCarousel"
+                data-bs-slide="prev"
+              >
+                <span class="carousel-control-prev-icon"></span>
+              </button>
+
+              <!-- tombol kanan -->
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#tentangCarousel"
+                data-bs-slide="next"
+              >
+                <span class="carousel-control-next-icon"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Konten -->
+          <div class="col-lg-6">
+            <h2 class="tentang-title">Tentang Homestay Kami</h2>
+            <p class="tentang-text">
+              Homestay kami menyediakan kenyamanan, keamanan, dan fasilitas
+              terbaik untuk liburan maupun perjalanan bisnis Anda. Lokasi
+              strategis, suasana tenang, dan pelayanan ramah menjadi prioritas
+              utama kami.
+            </p>
+            <p>
+              Homestay ini didirikan pada tahun 2020 dengan tujuan memberikan
+              pengalaman menginap yang menyenangkan
+            </p>
+
+            <div class="row fitur-list">
+              <div class="col-6 mb-3">
+                <div class="fitur-box">
+                  <i class="bi bi-house-door"></i>
+                  <span>Kamar Nyaman</span>
+                </div>
+              </div>
+              <div class="col-6 mb-3">
+                <div class="fitur-box">
+                  <i class="bi bi-wifi"></i>
+                  <span>WiFi Cepat</span>
+                </div>
+              </div>
+              <div class="col-6 mb-3">
+                <div class="fitur-box">
+                  <i class="bi bi-shield-check"></i>
+                  <span>Aman & Bersih</span>
+                </div>
+              </div>
+              <div class="col-6 mb-3">
+                <div class="fitur-box">
+                  <i class="bi bi-geo-alt"></i>
+                  <span>Lokasi Strategis</span>
+                </div>
+              </div>
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- List Kamar -->
+    <section id="kamar" class="py-5 kamar-section reveal">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="kamar-title">Pilihan Kamar Terbaik</h2>
+          <p class="kamar-subtitle">Pilih kamar sesuai kebutuhan Anda</p>
+        </div>
+
+        <div class="row g-4">
+          <!-- Kamar 1 -->
+          <div class="col-md-4 reveal">
+            <div class="kamar-card">
+              <div class="kamar-img">
+                <img src="images/kamar1.jpeg" alt="Homestay tanpa kamar" />
+                <span class="badge-kamar">Best Value</span>
+              </div>
+
+              <div class="kamar-body">
+                <h5>Tanpa Kamar</h5>
+
+                <p class="kamar-harga">
+                  Rp 250.000
+                  <span>/ malam</span>
+                </p>
+
+                <a href="detail-kamar.html?kamar=standard" class="kamar-btn"
+                  >Lihat Detail</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Kamar 2 -->
+          <div class="col-md-4 reveal">
+            <div class="kamar-card">
+              <div class="kamar-img">
+                <img src="images/kamar2.jpeg" alt="Homestay 1 kamar" />
+                <span class="badge-kamar populer">Populer</span>
+              </div>
+
+              <div class="kamar-body">
+                <h5>1 Kamar</h5>
+
+                <p class="kamar-harga">
+                  Rp 300.000
+                  <span>/ malam</span>
+                </p>
+
+                <a href="detail-kamar.html?kamar=1kamar" class="kamar-btn"
+                  >Lihat Detail</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Kamar 3 -->
+          <div class="col-md-4 reveal">
+            <div class="kamar-card">
+              <div class="kamar-img">
+                <img src="images/kamar3.jpeg" alt="Homestay 2 kamar" />
+                <span class="badge-kamar vip">VIP</span>
+              </div>
+
+              <div class="kamar-body">
+                <h5>2 Kamar</h5>
+
+                <p class="kamar-harga">
+                  Rp 350.000
+                  <span>/ malam</span>
+                </p>
+
+                <a href="detail-kamar.html?kamar=2kamar" class="kamar-btn"
+                  >Lihat Detail</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tanggapan -->
+    <section id="tanggapan" class="py-5 reveal">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="tanggapan-title">Tanggapan Pengunjung</h2>
+          <p class="text-light opacity-75">
+            Apa kata mereka tentang homestay kami
+          </p>
+        </div>
+
+        <div class="testimonial-slider-wrapper">
+          <div class="testimonial-slider" id="testimonialSlider">
+            <!-- Card 1 -->
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">A</div>
+
+                <div>
+                  <h5>Andi</h5>
+                  <div class="stars">★★★★★</div>
+                </div>
+              </div>
+
+              <p>"Tempatnya bersih, nyaman, dan sangat tenang."</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">S</div>
+
+                <div>
+                  <h5>Siti</h5>
+                  <div class="stars">★★★★★</div>
+                </div>
+              </div>
+
+              <p>"Pelayanan sangat ramah dan fasilitas lengkap."</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">B</div>
+
+                <div>
+                  <h5>Budi</h5>
+                  <div class="stars">★★★★★</div>
+                </div>
+              </div>
+              <p>"Lokasi strategis dan suasana sangat nyaman."</p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">D</div>
+                <div>
+                  <h5>Dewi</h5>
+                  <div class="stars">★★★★★</div>
+                </div>
+              </div>
+              <p>"Kamar bersih dan fasilitas lengkap."</p>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">R</div>
+                <div>
+                  <h5>Rizky</h5>
+                  <div class="stars">★★★★★</div>
+                </div>
+              </div>
+              <p>"Lokasi strategis dekat tempat wisata."</p>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">L</div>
+                <div>
+                  <h5>Lina</h5>
+                  <div class="stars">★★★★★</div>
+                </div>
+              </div>
+              <p>"Pelayanan sangat ramah dan membantu."</p>
+            </div>
+          </div>
+          <!-- Form Tulis Review -->
+          <div class="review-box mt-5">
+            <h4 class="text-white text-center mb-3">Tulis Tanggapan Anda</h4>
+
+            <form class="review-form">
+              <input type="text" id="namaReview" placeholder="Nama Anda" />
+              <textarea
+                id="isiReview"
+                rows="3"
+                placeholder="Tulis pengalaman Anda..."
+              ></textarea>
+
+             <div class="rating-input text-center mb-3">
+  <i class="fa fa-star" data-value="1"></i>
+  <i class="fa fa-star" data-value="2"></i>
+  <i class="fa fa-star" data-value="3"></i>
+  <i class="fa fa-star" data-value="4"></i>
+  <i class="fa fa-star" data-value="5"></i>
+</div>
+              <button id="kirimReview" type="button">Kirim Tanggapan</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-simple">
+      <div class="container">
+        <div class="footer-content">
+          <!-- Logo & deskripsi -->
+          <div class="footer-section">
+            <h3 class="footer-logo">Homestay Nyaman</h3>
+            <p class="footer-desc">
+              Tempat menginap nyaman, bersih, dan terpercaya untuk liburan Anda.
+            </p>
+          </div>
+
+          <!-- Kontak -->
+          <div class="footer-section">
+            <h5 class="footer-title">Kontak</h5>
+
+            <p>📞 0812-3456-7890</p>
+            <p>✉️ info@homestay.com</p>
+          </div>
+
+          <!-- Alamat -->
+          <div class="footer-section">
+            <h5 class="footer-title">Alamat</h5>
+
+            <p>
+              Jl. Raya Contoh No.123<br />
+              Jakarta, Indonesia
+            </p>
+          </div>
+
+          <!-- Sosial Media -->
+          <div class="footer-section">
+            <h5 class="footer-title">Follow Kami</h5>
+
+            <div class="footer-social">
+              <a href="https://instagram.com/rynnz28_" class="social-circle">
+                <i class="fab fa-instagram"></i>
+              </a>
+
+              <a href="https://facebook.com/usernamekamu" class="social-circle">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+
+              <a href="https://wa.me/628558038659" class="social-circle">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <p class="footer-copy text-center">
+          © 2026 Homestay Nyaman — All Rights Reserved
+        </p>
+      </div>
+    </footer>
+
+    <a href="https://wa.me/628558038659" class="wa-float" target="_blank">
+      💬
+    </a>
+
+    <!-- Custom JS -->
+    <script src="js/hamburger.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/loader.js"></script>
+    <script src="js/scroll-animation.js"></script>
+    <script src="js/review.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Homestay Nyaman</title>
+
+    <link rel="stylesheet" href="css/detail-kamar.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <section class="detail-section">
+      <div class="container">
+        <div class="row g-5">
+          <!-- KIRI -->
+          <div class="col-lg-7">
+            <!-- GALERI -->
+            <div class="gallery mb-4">
+              <img
+                id="gambarKamar"
+                class="gallery-main"
+                src=""
+                alt="Gambar Kamar"
+              />
+
+              <div class="gallery-thumb">
+                <img src="images/kamar1.jpeg" alt="kamar1" />
+                <img src="images/kamar2.jpeg" alt="kamar2" />
+                <img src="images/kamar3.jpeg" alt="kamar3" />
+                <img src="images/kamar1.jpeg" alt="kamar1" />
+              </div>
+            </div>
+
+            <!-- REVIEW PENGUNJUNG -->
+            <div class="review-section">
+              <h3 class="review-title mb-4">Review Pengunjung</h3>
+
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="review-card">
+                    <div class="review-header">
+                      <div class="avatar">A</div>
+
+                      <div>
+                        <b>Andi</b>
+                        <div class="stars">★★★★★</div>
+                      </div>
+                    </div>
+
+                    <p>Tempatnya sangat nyaman dan bersih.</p>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="review-card">
+                    <div class="review-header">
+                      <div class="avatar">S</div>
+
+                      <div>
+                        <b>Siti</b>
+                        <div class="stars">★★★★★</div>
+                      </div>
+                    </div>
+
+                    <p>Pelayanan ramah dan lokasi strategis.</p>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="review-card">
+                    <div class="review-header">
+                      <div class="avatar">B</div>
+
+                      <div>
+                        <b>Budi</b>
+                        <div class="stars">★★★★★</div>
+                      </div>
+                    </div>
+
+                    <p>Homestay terbaik untuk keluarga.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KANAN -->
+          <div class="col-lg-5">
+            <div class="detail-card">
+              <span class="badge-kamar">Best Choice</span>
+
+              <h1 id="namaKamar" class="kamar-title">Detail Kamar</h1>
+
+              <div class="rating-box">
+                <div class="stars">★★★★★</div>
+                <span class="rating-text">4.9 • 120 review</span>
+              </div>
+
+              <div class="harga-box">
+                <span id="hargaKamar" class="harga"></span>
+                <span class="per">/ malam</span>
+              </div>
+
+              <h5 class="mt-4">Fasilitas</h5>
+
+              <ul id="fasilitasKamar" class="fasilitas-list"></ul>
+
+              <!-- BOOKING -->
+              <div class="booking-box">
+                <h5 class="mb-3">Booking Kamar</h5>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <label for="checkin" class="form-label">Check-in</label>
+                    <input type="date" id="checkin" class="form-control" />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="checkout" class="form-label">Check-out</label>
+                    <input type="date" id="checkout" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="booking-info mt-3">
+                  <p>Total Malam : <span id="totalMalam">0</span> malam</p>
+
+                  <p class="total-harga">
+                    Total Harga :
+                    <span id="totalHarga">Rp 0</span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- METODE PEMBAYARAN -->
+
+              <div class="payment-section mt-4">
+                <h5 class="mb-3">Metode Pembayaran</h5>
+
+                <div class="payment-method">
+                  <label class="payment-card">
+                    <input type="radio" name="payment" value="Cash" />
+                    <div class="card-content">💵 Bayar di Tempat</div>
+                  </label>
+
+                  <label class="payment-card">
+                    <input type="radio" name="payment" value="Transfer" />
+                    <div class="card-content">🏦 Transfer / E-Wallet</div>
+                  </label>
+                </div>
+
+                <!-- PILIH BANK / EWALLET -->
+
+                <div id="transferOptions" class="transfer-box">
+
+                  <h6 class="mb-3">Pilih Bank / E-Wallet</h6>
+
+                  <div class="payment-grid">
+
+                  <label class="payment-option">
+                  <input type="radio" name="bank" value="Bank BNI">
+                  <div class="payment-card">
+                  <img src="images/bni.png" alt="BNI">
+                  <span>BNI</span>
+                  </div>
+                  </label>
+
+                  <label class="payment-option">
+                  <input type="radio" name="bank" value="Bank BCA">
+                  <div class="payment-card">
+                  <img src="images/bca.png" alt="BCA">
+                  <span>BCA</span>
+                  </div>
+                  </label>
+
+                  <label class="payment-option">
+                  <input type="radio" name="bank" value="Bank DKI">
+                  <div class="payment-card">
+                  <img src="images/dki.png" alt="DKI">
+                  <span>BJ</span>
+                  </div>
+                  </label>
+
+                  <label class="payment-option">
+                  <input type="radio" name="bank" value="DANA">
+                  <div class="payment-card">
+                  <img src="images/dana.png" alt="DANA">
+                  <span>DANA</span>
+                  </div>
+                  </label>
+
+                  <label class="payment-option">
+                  <input type="radio" name="bank" value="GoPay">
+                  <div class="payment-card">
+                  <img src="images/gopay.png" alt="GoPay">
+                  <span>GoPay</span>
+                  </div>
+                  </label>
+
+                  <label class="payment-option">
+                  <input type="radio" name="bank" value="OVO">
+                  <div class="payment-card">
+                  <img src="images/ovo.png" alt="OVO">
+                  <span>OVO</span>
+                  </div>
+                  </label>
+
+                  </div>
+
+                  </div>
+
+              <div class="btn-area">
+                <button id="btnPesan" class="btn btn-success">
+                  Pesan via WhatsApp
+                </button>
+
+                <a href="index.html" class="btn btn-outline-secondary">
+                  Kembali
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="js/detail-kamar.js"></script>
+  </body>
+</html>

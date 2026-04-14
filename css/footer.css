@@ -1,0 +1,92 @@
+/* =========================
+   FOOTER FINAL CLEAN
+========================= */
+.footer-simple {
+  background: linear-gradient(135deg, #0a0f2c, #111a3a);
+  color: white;
+  padding: 50px 20px 20px;
+}
+
+/* grid layout */
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+}
+
+/* logo */
+.footer-logo {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* title */
+.footer-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+/* text */
+.footer-section p {
+  margin: 5px 0;
+  opacity: 0.7;
+}
+
+/* social */
+.footer-social {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* hover */
+.social-circle:hover {
+  background: #0d6efd;
+  transform: translateY(-5px);
+}
+
+/* divider */
+.footer-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+  margin: 25px 0;
+}
+
+/* copyright */
+.footer-copy {
+  text-align: center;
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.social-circle{
+width:45px;
+height:45px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+color:white;
+text-decoration:none;
+transition:0.35s;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* INSTAGRAM */
+.social-circle.instagram{
+background:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7);
+}
+
+/* FACEBOOK */
+.social-circle.facebook{
+background:#1877f2;
+}
+
+/* WHATSAPP */
+.social-circle.whatsapp{
+background:#25d366;
+}
+
