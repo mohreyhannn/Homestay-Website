@@ -1,9 +1,13 @@
 /* =========================
    TENTANG SECTION PREMIUM
 ========================= */
+#tentang {
+  background: #f8f9fa;
+}
+
 
 .tentang-section {
-  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  background: linear-gradient(135deg, #9ebcdb, #e7dddd);
   position: relative;
   overflow: hidden;
 }
@@ -65,15 +69,14 @@
 
 /* Fitur */
 .fitur-box {
-  background: white;
-  padding: 12px 15px;
-  border-radius: 12px;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  background: white;
+  padding: 12px 15px;
+  border-radius: 10px;
   transition: 0.3s ease;
-  cursor: pointer;
+  width: 100%;
 }
 
 .fitur-box i {
@@ -140,4 +143,31 @@
 
 .card .btn:hover {
   transform: scale(1.05);
+}
+
+/* =========================
+   FIX MOBILE FITUR LIST
+========================= */
+@media (max-width: 576px) {
+
+  .fitur-list {
+    margin: 0;
+  }
+
+  .fitur-list .col-6 {
+    padding: 5px;
+  }
+
+  .fitur-box {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .fitur-box i {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+
 }

@@ -13,41 +13,156 @@ body {
   overflow-x: hidden;
 }
 
-#loader{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
+/* From Uiverse.io by Shoh2008 */ 
+.loader {
+  width: 45px;
+  height: 40px;
+  background: linear-gradient(#0000 calc(1*100%/6),#fff 0 calc(3*100%/6),#0000 0),
+            linear-gradient(#0000 calc(2*100%/6),#fff 0 calc(4*100%/6),#0000 0),
+            linear-gradient(#0000 calc(3*100%/6),#fff 0 calc(5*100%/6),#0000 0);
+  background-size: 10px 400%;
+  background-repeat: no-repeat;
+  animation: matrix 1s infinite linear;
 }
 
-.spinner{
-width:50px;
-height:50px;
-border:5px solid #ddd;
-border-top:5px solid #0d6efd;
-border-radius:50%;
-animation:spin 1s linear infinite;
+@keyframes matrix {
+  0% {
+    background-position: 0% 100%, 50% 100%, 100% 100%
+  }
+
+  100% {
+    background-position: 0% 0%, 50% 0%, 100% 0%
+  }
+}
+    
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #0d6efd;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-@keyframes spin{
-0%{transform:rotate(0deg)}
-100%{transform:rotate(360deg)}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.reveal{
-opacity:0;
-transform:translateY(50px);
-transition:1s;
+.reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: 1s;
 }
 
-.reveal.active{
-opacity:1;
-transform:translateY(0);
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
 }
 
+section {
+  scroll-margin-top: 80px;
+}
+
+/* =========================
+   SMOOTH SECTION BLEND
+========================= */
+
+/* efek blur di bawah section */
+.section-blend::after {
+  content: "";
+  position: absolute;
+  bottom: -80px;
+  left: 0;
+  width: 100%;
+  height: 120px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0),
+    rgba(0,0,0,0.6),
+    #f8f9fa
+  );
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* section berikutnya naik */
+.section-overlap {
+  margin-top: -60px;
+  position: relative;
+  z-index: 3;
+}
+
+/* =========================
+   RESPONSIVE GLOBAL
+========================= */
+
+/* Gambar biar tidak overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Font lebih rapi */
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+}
+
+p {
+  line-height: 1.6;
+}
+
+@media (max-width: 576px) {
+
+  .navbar-collapse {
+    right: 10px;
+  }
+
+  .nav-box {
+    width: 180px;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .cover-section {
+    padding: 120px 20px 60px;
+    text-align: center;
+  }
+  .hero-title {
+    font-size: 26px;
+  }
+  .hero-subtitle {
+    font-size: 14px;
+  }
+  .hero-buttons .btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .tentang-section .row {
+    flex-direction: column;
+  }
+
+  .tentang-img {
+    margin-bottom: 20px;
+  }
+
+  .tentang-text {
+    text-align: center;
+  }
+
+}
