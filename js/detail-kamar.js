@@ -73,8 +73,7 @@ document.getElementById("gambarKamar").src = this.src;
 
 });
 
-const checkin = document.getElementById("checkin");
-const checkout = document.getElementById("checkout");
+const tanggal = document.getElementById("tanggal");
 const totalMalam = document.getElementById("totalMalam");
 const totalHarga = document.getElementById("totalHarga");
 
@@ -83,45 +82,46 @@ let hargaPerMalam = Number.parseInt(
 kamarData.harga.replaceAll(/[^\d]/g,"")
 );
 
+function getTanggal(){
+  const dates = tanggal.value.split(" to ");
+
+  if(dates.length < 2) return null;
+
+  return {
+    checkin: dates[0],
+    checkout: dates[1]
+  };
+}
+
 function hitungBooking(){
 
-const tglMasuk = new Date(checkin.value);
-const tglKeluar = new Date(checkout.value);
+  const dataTanggal = getTanggal();
 
-if(checkin.value && checkout.value){
+  if(!dataTanggal) return;
 
-    if(tglKeluar <= tglMasuk){
-alert("Tanggal checkout harus setelah checkin");
-return;
+  const tglMasuk = new Date(dataTanggal.checkin);
+  const tglKeluar = new Date(dataTanggal.checkout);
+
+  if(tglKeluar <= tglMasuk){
+    alert("Tanggal checkout harus setelah checkin");
+    return;
+  }
+
+  const selisih = tglKeluar - tglMasuk;
+  const malam = selisih / (1000 * 60 * 60 * 24);
+
+  totalMalam.innerText = malam;
+
+  const total = malam * hargaPerMalam;
+
+  totalHarga.innerText =
+    "Rp " + total.toLocaleString("id-ID");
 }
 
-const selisih = tglKeluar - tglMasuk;
-
-const malam = selisih / (1000 * 60 * 60 * 24);
-
-if(malam > 0){
-
-totalMalam.innerText = malam;
-
-const total = malam * hargaPerMalam;
-
-totalHarga.innerText =
-"Rp " + total.toLocaleString("id-ID");
-
-}else{
-
-totalMalam.innerText = 0;
-totalHarga.innerText = "Rp 0";
-
-}
-
-}
-
-}
+tanggal.addEventListener("change", hitungBooking);
 
 // jalankan saat tanggal berubah
-checkin.addEventListener("change", hitungBooking);
-checkout.addEventListener("change", hitungBooking);
+
 
 const btnPesan = document.getElementById("btnPesan");
 
@@ -142,75 +142,80 @@ transferOptions.style.display = "none";
 
 btnPesan.addEventListener("click", function () {
 
-const checkin = document.getElementById("checkin").value;
-const checkout = document.getElementById("checkout").value;
-const kamar = document.getElementById("namaKamar").innerText;
-const malam = document.getElementById("totalMalam").innerText;
-const total = document.getElementById("totalHarga").innerText;
+  // ambil tanggal dari function (BUKAN split manual lagi)
+  const dataTanggal = getTanggal();
 
-const payment = document.querySelector('input[name="payment"]:checked');
+  if (!dataTanggal) {
+    alert("⚠️ Silakan pilih tanggal terlebih dahulu.");
+    return;
+  }
 
+  const checkin = dataTanggal.checkin;
+  const checkout = dataTanggal.checkout;
 
-// VALIDASI
+  // ambil kamar
+  const kamar = document.getElementById("namaKamar").innerText;
 
-if (!checkin || !checkout) {
+  // ambil payment
+  const payment = document.querySelector('input[name="payment"]:checked');
 
-alert("⚠️ Silakan pilih tanggal Check-in dan Check-out terlebih dahulu.");
+  if (!payment) {
+    alert("⚠️ Silakan pilih metode pembayaran.");
+    return;
+  }
 
-return;
+  let paymentDetail = "";
 
-}
+  if (payment.value === "Transfer") {
+    const bank = document.querySelector('input[name="bank"]:checked');
 
-if (!payment) {
+    if (!bank) {
+      alert("⚠️ Pilih bank dulu");
+      return;
+    }
 
-alert("⚠️ Silakan pilih metode pembayaran.");
+    paymentDetail = bank.value;
+  } else {
+    paymentDetail = payment.value;
+  }
 
-return;
+  // 🚀 kirim ke backend
+  fetch("http://localhost:5000/api/booking", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      room_id: kamar,
+      check_in: checkin,
+      check_out: checkout
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
 
-}
+  if(data.error){
+    alert("❌ " + data.error);
+    return;
+  }
 
-let paymentDetail = "";
+  alert("✅ Booking berhasil, lanjut pembayaran");
 
-if(payment.value === "Transfer"){
+  // 🔥 INI KUNCI NYA
+  pay(data.order_id);
 
-const bank = document.querySelector('input[name="bank"]:checked');
+})
+  .catch(err => {
+    console.error(err);
+    alert("❌ Gagal booking");
+  });
 
-if(!bank){
-alert("⚠️ Silakan pilih bank atau e-wallet terlebih dahulu.");
-return;
-}
+});
 
-paymentDetail = bank.value;
-
-}else{
-
-paymentDetail = payment.value;
-
-}
 
 
 // PESAN WHATSAPP
 
-const message = `
-Halo, saya ingin memesan kamar.
-
-🏨 Kamar : ${kamar}
-
-📅 Check-in : ${checkin}
-📅 Check-out : ${checkout}
-
-🌙 Total Malam : ${malam}
-
-💰 Total Harga : ${total}
-
-💳 Metode Pembayaran : ${paymentDetail}
-`;
-
-const url = `https://wa.me/628558038659?text=${encodeURIComponent(message)}`;
-
-window.open(url, "_blank");
-
-});
 
 const btnReview = document.getElementById("kirimReview");
 
@@ -247,3 +252,57 @@ document.getElementById("namaReview").value="";
 document.getElementById("isiReview").value="";
 
 });
+
+fetch(`http://localhost:5000/api/booked/${kamar}`)
+  .then(res => {
+    if (!res.ok) {
+      throw new Error("Gagal ambil data tanggal");
+    }
+    return res.json();
+  })
+  .then(data => {
+
+    flatpickr("#tanggal", {
+      mode: "range",
+      dateFormat: "Y-m-d",
+      disable: data,
+
+      onChange: function(){
+        hitungBooking();
+      }
+
+    });
+
+  })
+  .catch(err => {
+    console.error("ERROR:", err);
+
+    // 🔥 fallback kalau API mati
+    flatpickr("#tanggal", {
+      mode: "range",
+      dateFormat: "Y-m-d",
+
+      onChange: function(){
+        hitungBooking();
+      }
+
+    });
+
+  });
+
+  function pay(order_id){
+
+fetch("http://localhost:5000/api/pay", {
+method: "POST",
+headers: {"Content-Type":"application/json"},
+body: JSON.stringify({
+  order_id: order_id,
+  amount: hargaPerMalam   // bisa lu upgrade nanti
+})
+})
+.then(res => res.json())
+.then(data => {
+  snap.pay(data.token);
+});
+
+}
