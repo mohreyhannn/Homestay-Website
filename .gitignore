@@ -1,0 +1,14 @@
+# ENV (rahasia)
+.env
+backend/.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Node / frontend (kalau ada)
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

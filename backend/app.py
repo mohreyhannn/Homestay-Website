@@ -2,17 +2,20 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
+from dotenv import load_dotenv
 import uuid
 import midtransclient
+import os
 
 snap = midtransclient.Snap(
     is_production=False,
     server_key="ISI_SERVER_KEY_KAMU"
 )
 
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:rynnn28@localhost/homestay_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 
 db = SQLAlchemy(app)
 CORS(app)
