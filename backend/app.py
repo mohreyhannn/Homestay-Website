@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import uuid
 import midtransclient
@@ -30,12 +30,26 @@ class Booking(db.Model):
     check_out = db.Column(db.Date)
     status = db.Column(db.String(20))
     order_id = db.Column(db.String(100))
+    total = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
+def clear_expired():
+    expired_time = datetime.utcnow() - timedelta(hours=1)
+
+    expired = Booking.query.filter(
+        Booking.status == "pending",
+        Booking.created_at < expired_time
+    ).all()
+
+    for b in expired:
+        b.status = "expired"
+
+    db.session.commit()
     
 def is_available(room_id, check_in, check_out):
     conflict = Booking.query.filter(
         Booking.room_id == room_id,
-        Booking.status != "cancel",
+        Booking.status.in_(["pending", "paid"]),
         Booking.check_out > check_in,
         Booking.check_in < check_out
     ).first()
@@ -45,10 +59,18 @@ def is_available(room_id, check_in, check_out):
 # API ENDPOINTS
 @app.route("/api/booking", methods=["POST"])
 def booking():
+    clear_expired()
     data = request.json
 
     check_in = datetime.strptime(data['check_in'], "%Y-%m-%d")
     check_out = datetime.strptime(data['check_out'], "%Y-%m-%d")
+    
+    if check_in < datetime.today():
+        return {"error": "Tanggal tidak valid"}, 400
+
+    if check_out <= check_in:
+        return {"error": "Tanggal tidak valid"}, 400
+
 
     if not is_available(data['room_id'], check_in, check_out):
         return {"error": "Tanggal sudah dibooking"}, 400
@@ -60,7 +82,8 @@ def booking():
         check_in=check_in,
         check_out=check_out,
         status="pending",
-        order_id=order_id
+        order_id=order_id,
+        total=data.get("total", 0),
     )
 
     db.session.add(new_booking)
@@ -68,22 +91,14 @@ def booking():
 
     return {"order_id": order_id}
 
-@app.route("/api/pay", methods=["POST"])
-def pay():
-    data = request.json
-
-    transaction = snap.create_transaction({
-        "transaction_details": {
-            "order_id": data["order_id"],
-            "gross_amount": data["amount"]
-        }
-    })
-
-    return {"token": transaction["token"]}
-
 @app.route("/api/booked/<room_id>", methods=["GET"])
 def booked(room_id):
-    bookings = Booking.query.filter_by(room_id=room_id).all()
+    clear_expired()
+    
+    bookings = Booking.query.filter(
+        Booking.room_id == room_id,
+        Booking.status.in_(["pending", "paid"])
+    ).all()
 
     result = []
     for b in bookings:
@@ -93,29 +108,6 @@ def booked(room_id):
         })
 
     return jsonify(result)
-
-@app.route('/payment/notification', methods=['POST'])
-def payment_notification():
-    data = request.json
-
-    booking = Booking.query.filter_by(order_id=data['order_id']).first()
-
-    if not booking:
-        return "Not Found", 404
-
-    status = data['transaction_status']
-
-    if status == "settlement":
-        booking.status = "paid"
-    elif status in ["expire", "cancel"]:
-        booking.status = "cancel"
-
-    db.session.commit()
-
-    return "OK"
-    
-    
-    
     
 # MAIN
 if __name__ == "__main__":

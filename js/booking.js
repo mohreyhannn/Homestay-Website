@@ -106,6 +106,7 @@ async function initCalendar() {
       mode: "range",
       dateFormat: "Y-m-d",
       disable: bookedDates,
+      minDate: "today",
       onChange: hitungBooking
     });
 
@@ -124,22 +125,12 @@ async function initCalendar() {
 initCalendar();
 
 // ======================
-// PAYMENT METHOD
-// ======================
-const paymentRadios = document.querySelectorAll('input[name="payment"]');
-const transferOptions = document.getElementById("transferOptions");
-
-paymentRadios.forEach(radio => {
-  radio.addEventListener("change", function () {
-    transferOptions.style.display =
-      this.value === "Transfer" ? "block" : "none";
-  });
-});
-
-// ======================
 // BUTTON PESAN
 // ======================
 btnPesan.addEventListener("click", async function () {
+  btnPesan.disabled = true;
+  btnPesan.innerText = "Mengalihkan ke WhatsApp...";
+
   const dataTanggal = getTanggal();
 
   if (!dataTanggal) {
@@ -155,25 +146,27 @@ btnPesan.addEventListener("click", async function () {
     return;
   }
 
-  if (totalMalam.innerText === "0") {
+  const malam = Number(totalMalam.innerText);
+  if (malam <= 0) {
     alert("Pilih tanggal yang benar!");
     return;
   }
 
-  const payment = document.querySelector('input[name="payment"]:checked');
-  if (!payment) {
-    alert("Pilih metode pembayaran!");
-    return;
-  }
+  const total = Number.parseInt(
+    totalHarga.innerText.replace(/\D/g, ""), 
+    10
+  );
 
   try {
+    // ✅ SIMPAN KE DATABASE
     const res = await fetch("http://localhost:5000/api/booking", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         room_id: kamar,
         check_in: dataTanggal.checkin,
-        check_out: dataTanggal.checkout
+        check_out: dataTanggal.checkout,
+        total: total
       })
     });
 
@@ -184,7 +177,16 @@ btnPesan.addEventListener("click", async function () {
       return;
     }
 
-    await pay(result.order_id);
+    // ✅ BUAT PESAN WA
+    const message = `Halo, saya ingin booking:
+Kamar: ${kamarData.nama}
+Tanggal: ${dataTanggal.checkin} - ${dataTanggal.checkout}
+Total: Rp ${total.toLocaleString("id-ID")}`;
+
+    const waLink = `https://wa.me/628558038659?text=${encodeURIComponent(message)}`;
+
+    // ✅ REDIRECT KE WA
+    window.location.href = waLink;
 
   } catch (error) {
     console.error(error);
@@ -192,28 +194,3 @@ btnPesan.addEventListener("click", async function () {
   }
 });
 
-// ======================
-// MIDTRANS PAY
-// ======================
-async function pay(order_id) {
-  try {
-    const total = Number.parseInt(totalHarga.innerText.replace(/\D/g, ""), 10);
-
-    const res = await fetch("http://localhost:5000/api/pay", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        order_id,
-        amount: total
-      })
-    });
-
-    const data = await res.json();
-
-    snap.pay(data.token);
-
-  } catch (error) {
-    console.error(error);
-    alert("Gagal memulai pembayaran");
-  }
-}
