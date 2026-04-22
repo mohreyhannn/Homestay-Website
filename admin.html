@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- CSS EXTERNAL -->
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body class="container py-4">
+
+<h3 class="mb-4">📊 Dashboard Booking</h3>
+
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <h5>Total Booking</h5>
+      <h3 id="totalBooking">0</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <h5>Pending</h5>
+      <h3 id="totalPending">0</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <h5>Paid</h5>
+      <h3 id="totalPaid">0</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      <h5>Cancel</h5>
+      <h3 id="totalCancel">0</h3>
+    </div>
+  </div>
+</div>
+
+<input type="text" id="search" class="form-control mb-3" placeholder="🔍 Cari kamar atau tanggal...">
+
+<div class="card p-3">
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Kamar</th>
+      <th>Tanggal</th>
+      <th>Total</th>
+      <th>Status</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody id="tableBooking"></tbody>
+</table>
+</div>
+<script src="js/admin.js" defer></script>
+
+</body>
+</html>

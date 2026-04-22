@@ -6,22 +6,67 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/booking.css">
 </head>
 
-<body class="container py-5">
+<body class="bg-light">
 
-<h2 id="namaKamar">Nama Kamar</h2>
-<p id="hargaKamar">Harga Kamar</p>
+<div class="container py-5">
+  <div class="row">
 
-<!-- 📅 CALENDAR -->
-<label for="tanggal">Pilih Tanggal</label>
-<input type="text" id="tanggal" class="form-control mb-3">
+    <!-- KIRI: FORM -->
+    <div class="col-md-7">
 
-<p>Total Malam: <span id="totalMalam">0</span></p>
-<p>Total Harga: <span id="totalHarga">Rp 0</span></p>
+      <h3 id="namaKamar"></h3>
+      <p id="hargaKamar" class="text-muted"></p>
 
-<button id="btnPesan" class="btn btn-success mt-3">Konfirmasi via WhatsApp
-</button>
+      <!-- PILIH TANGGAL -->
+      <div class="mb-3">
+        <label class="form-label">Pilih Tanggal</label>
+        <input type="text" id="tanggal" class="form-control">
+      </div>
+
+      <!-- INFO -->
+      <div class="d-flex justify-content-between">
+        <span>Total Malam</span>
+        <b id="totalMalam">0</b>
+      </div>
+
+      <div class="d-flex justify-content-between mb-3">
+        <span>Total Harga</span>
+        <b id="totalHarga" class="text-success">Rp 0</b>
+      </div>
+
+      <div class="alert alert-info">
+        Booking akan dikonfirmasi melalui WhatsApp
+      </div>
+
+    </div>
+
+    <!-- KANAN: RINGKASAN -->
+    <div class="col-md-5">
+      <div class="card p-4 sticky-top" style="top:20px">
+
+        <h5>Ringkasan Booking</h5>
+
+        <p><b>Kamar:</b> <span id="sumKamar">-</span></p>
+        <p><b>Tanggal:</b> <span id="sumTanggal">-</span></p>
+        <p><b>Malam:</b> <span id="sumMalam">0</span></p>
+
+        <hr>
+
+        <h4 id="sumHarga">Rp 0</h4>
+
+        <button id="btnPesan" class="btn btn-success w-100 mt-3">
+          Konfirmasi via WhatsApp
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="js/booking.js"></script>

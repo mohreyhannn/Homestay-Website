@@ -1,0 +1,20 @@
+body {
+  background: #f4f6f9;
+}
+
+.card {
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: white;
+}
+
+.pending { background: orange; }
+.paid { background: green; }
+.cancel { background: red; }
+.expired { background: gray; }

@@ -1,0 +1,40 @@
+body {
+  background: #f4f6f9;
+}
+
+.card {
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+h3 {
+  font-weight: 600;
+}
+
+#totalHarga {
+  font-size: 18px;
+}
+
+button {
+  border-radius: 10px;
+}
+
+/* tanggal yang sudah dibooking */
+.flatpickr-day.disabled {
+  background: #ff4d4d !important;
+  color: white !important;
+  border-radius: 50%;
+}
+
+/* tanggal dipilih */
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: #28a745 !important;
+  color: white;
+}
+
+/* range */
+.flatpickr-day.inRange {
+  background: #c8f7d1 !important;
+}
+

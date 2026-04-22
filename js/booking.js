@@ -90,6 +90,16 @@ function hitungBooking() {
   const total = malam * hargaPerMalam;
   totalHarga.innerText = "Rp " + total.toLocaleString("id-ID");
 
+  document.getElementById("sumKamar").innerText = kamarData.nama;
+
+document.getElementById("sumTanggal").innerText =
+  dataTanggal.checkin + " - " + dataTanggal.checkout;
+
+document.getElementById("sumMalam").innerText = malam;
+
+document.getElementById("sumHarga").innerText =
+  "Rp " + total.toLocaleString("id-ID");
+
   // aktifkan tombol kalau valid
   btnPesan.disabled = malam <= 0;
 }

@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 import uuid
 import midtransclient
@@ -31,10 +31,10 @@ class Booking(db.Model):
     status = db.Column(db.String(20))
     order_id = db.Column(db.String(100))
     total = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     
 def clear_expired():
-    expired_time = datetime.utcnow() - timedelta(hours=1)
+    expired_time = datetime.now(timezone.utc) - timedelta(hours=1)
 
     expired = Booking.query.filter(
         Booking.status == "pending",
@@ -108,6 +108,44 @@ def booked(room_id):
         })
 
     return jsonify(result)
+
+@app.route("/api/admin/bookings", methods=["GET"])
+def get_bookings():
+    bookings = Booking.query.order_by(Booking.created_at.desc()).all()
+
+    result = []
+    for b in bookings:
+        result.append({
+            "id": b.id,
+            "room_id": b.room_id,
+            "check_in": b.check_in.strftime("%Y-%m-%d"),
+            "check_out": b.check_out.strftime("%Y-%m-%d"),
+            "status": b.status,
+            "total": b.total,
+            "created_at": b.created_at.strftime("%Y-%m-%d %H:%M")
+        })
+
+    return jsonify(result)
+
+@app.route("/api/admin/update-status", methods=["POST"])
+def update_status():
+    data = request.json
+
+    booking = Booking.query.get(data["id"])
+
+    if not booking:
+        return {"error": "Booking tidak ditemukan"}, 404
+
+    booking.status = data["status"]
+    db.session.commit()
+
+    return {"message": "Status berhasil diupdate"}
+
+@app.route("/api/admin/reset", methods=["POST"])
+def reset():
+    Booking.query.delete()
+    db.session.commit()
+    return {"message": "Database direset"}
     
 # MAIN
 if __name__ == "__main__":
