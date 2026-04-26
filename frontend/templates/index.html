@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Homestay Nyaman</title>
+    <title>Homestay Algamas</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/algamas.png') }}">
 
     <!-- Bootstrap CSS -->
     <link
@@ -20,15 +21,42 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/navbar.css" />
-    <link rel="stylesheet" href="css/cover.css" />
-    <link rel="stylesheet" href="css/tentang.css" />
-    <link rel="stylesheet" href="css/kamar.css" />
-    <link rel="stylesheet" href="css/testimonial.css" />
-    <link rel="stylesheet" href="css/footer.css" />
-    <link rel="stylesheet" href="css/components.css" />
-    <link rel="stylesheet" href="css/responsive.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/navbar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/cover.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/tentang.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/kamar.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/testimonial.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/footer.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/responsive.css') }}"
+    />
   </head>
   <body>
     <!-- Loader -->
@@ -38,7 +66,15 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg custom-navbar fixed-top">
       <div class="container">
-        <a class="navbar-brand fw-bold">Homestay</a>
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+  <img
+    id="navbar-logo"
+    src="{{ url_for('static', filename='images/logo-light.png') }}"
+    alt="Algamas Logo"
+    class="navbar-logo me-2"
+  />
+  <span id="navbar-text">Homestay</span>
+</a>
 
         <button
           class="navbar-toggler border-0"
@@ -95,9 +131,9 @@
 
     <!-- Cover Section -->
     <section
-  id="cover"
-  class="cover-section section-blend reveal d-flex align-items-center text-center text-white"
->
+      id="cover"
+      class="cover-section section-blend reveal d-flex align-items-center text-center text-white"
+    >
       <div class="container hero-content">
         <h1 class="hero-title">Selamat Datang di Homestay Nyaman</h1>
         <p class="hero-subtitle">
@@ -157,7 +193,7 @@
                 <div class="carousel-item active">
                   <div class="image-wrapper">
                     <img
-                      src="images/algamas.jpg"
+                      src="{{ url_for('static', filename='images/kamar1.jpeg') }}"
                       class="d-block w-100"
                       alt="Homestay Algamas tampilan kamar nyaman"
                     />
@@ -170,7 +206,7 @@
                 <div class="carousel-item">
                   <div class="image-wrapper">
                     <img
-                      src="images/samping.jpeg"
+                      src="{{ url_for('static', filename='images/samping.jpeg') }}"
                       class="d-block w-100"
                       alt="Fasilitas homestay Algamas lengkap"
                     />
@@ -183,7 +219,7 @@
                 <div class="carousel-item">
                   <div class="image-wrapper">
                     <img
-                      src="images/halaman.jpeg"
+                      src="{{ url_for('static', filename='images/halaman.jpeg') }}"
                       class="d-block w-100"
                       alt="Lingkungan homestay Algamas tenang"
                     />
@@ -274,7 +310,7 @@
           <div class="col-md-4 reveal">
             <div class="kamar-card">
               <div class="kamar-img">
-                <img src="images/kamar1.jpeg" alt="Homestay tanpa kamar" />
+                <img src="{{ url_for('static', filename='images/halaman.jpeg') }}" alt="Homestay tanpa kamar" />
                 <span class="badge-kamar">Best Value</span>
               </div>
 
@@ -286,7 +322,7 @@
                   <span>/ malam</span>
                 </p>
 
-                <a href="detail-kamar.html?kamar=standard" class="kamar-btn"
+                <a href="{{ url_for('detail_kamar') }}?kamar=standard" class="kamar-btn"
                   >Lihat Detail</a
                 >
               </div>
@@ -297,7 +333,7 @@
           <div class="col-md-4 reveal">
             <div class="kamar-card">
               <div class="kamar-img">
-                <img src="images/kamar2.jpeg" alt="Homestay 1 kamar" />
+                <img src="{{ url_for('static', filename='images/kamar2.jpeg') }}" alt="Homestay 1 kamar" />
                 <span class="badge-kamar populer">Populer</span>
               </div>
 
@@ -309,7 +345,7 @@
                   <span>/ malam</span>
                 </p>
 
-                <a href="detail-kamar.html?kamar=1kamar" class="kamar-btn"
+                <a href="{{ url_for('detail_kamar') }}?kamar=1kamar" class="kamar-btn"
                   >Lihat Detail</a
                 >
               </div>
@@ -320,7 +356,7 @@
           <div class="col-md-4 reveal">
             <div class="kamar-card">
               <div class="kamar-img">
-                <img src="images/kamar3.jpeg" alt="Homestay 2 kamar" />
+                <img src="{{ url_for('static', filename='images/kamar3.jpeg') }}" alt="Homestay 2 kamar" />
                 <span class="badge-kamar vip">VIP</span>
               </div>
 
@@ -332,7 +368,7 @@
                   <span>/ malam</span>
                 </p>
 
-                <a href="detail-kamar.html?kamar=2kamar" class="kamar-btn"
+                <a href="{{ url_for('detail_kamar') }}?kamar=2kamar" class="kamar-btn"
                   >Lihat Detail</a
                 >
               </div>
@@ -519,11 +555,10 @@
     </a>
 
     <!-- Custom JS -->
-    <script src="js/hamburger.js"></script>
-    <script src="js/navbar.js"></script>
-    <script src="js/loader.js"></script>
-    <script src="js/scroll-animation.js"></script>
-    <script src="js/review.js"></script>
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/scroll-animation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/review.js') }}"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

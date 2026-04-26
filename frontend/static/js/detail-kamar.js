@@ -6,7 +6,7 @@ const kamar = params.get("kamar");
 
 if (!kamar) {
   alert("Kamar tidak ditemukan!");
-  globalThis.location.href = "index.html";
+  globalThis.location.href = "/";
 }
 
 // ======================
@@ -16,19 +16,19 @@ const data = {
   standard: {
     nama: "Kamar Standard",
     harga: "Rp 250.000",
-    gambar: "images/kamar1.jpeg",
+    gambar: "/static/images/kamar1.jpeg",
     fasilitas: ["WiFi Gratis", "AC", "Kamar Mandi", "TV"]
   },
   "1kamar": {
     nama: "Kamar 1 Bedroom",
     harga: "Rp 300.000",
-    gambar: "images/kamar2.jpeg",
+    gambar: "/static/images/kamar2.jpeg",
     fasilitas: ["WiFi Gratis", "AC", "TV", "Air Panas", "Parkir"]
   },
   "2kamar": {
     nama: "Kamar 2 Bedroom",
     harga: "Rp 350.000",
-    gambar: "images/kamar3.jpeg",
+    gambar: "/static/images/kamar3.jpeg",
     fasilitas: ["WiFi Gratis", "AC", "TV", "Dapur"]
   }
 };
@@ -111,5 +111,5 @@ if (btnReview) {
 // BUTTON BOOKING
 // ======================
 document.getElementById("btnBooking").addEventListener("click", function () {
-  globalThis.location.href = `booking.html?kamar=${kamar}`;
+ globalThis.location.href = `/booking?kamar=${kamar}`;
 });

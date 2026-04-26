@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask import render_template
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 import uuid
@@ -14,7 +15,11 @@ snap = midtransclient.Snap(
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder="../frontend/templates",
+    static_folder="../frontend/static"
+)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 
 db = SQLAlchemy(app)
@@ -146,6 +151,22 @@ def reset():
     Booking.query.delete()
     db.session.commit()
     return {"message": "Database direset"}
+
+@app.route("/", methods=["GET"])
+def home():
+    return render_template("index.html")
+
+@app.route("/booking", methods=["GET"])
+def booking_page():   # ← beda nama
+    return render_template("booking.html")
+
+@app.route("/admin", methods=["GET"])
+def admin_page():
+    return render_template("admin.html")
+
+@app.route("/detail-kamar", methods=["GET"])
+def detail_kamar():
+    return render_template("detail-kamar.html")
     
 # MAIN
 if __name__ == "__main__":

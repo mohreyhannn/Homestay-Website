@@ -3,7 +3,6 @@
 ========================= */
 
 .custom-navbar {
-  background: rgba(58, 77, 251, 0.419);
   padding: 10px 0;
   position: fixed;
   top: 0;
@@ -64,7 +63,8 @@
 
 /* Hover setelah scrol */
 .custom-navbar.scrolled .nav-link {
-  color: #060606 !important;
+  color:  #3898f8e1 !important;
+  font-weight: 500;
 }
 
 /* hover KHUSUS setelah scroll */
@@ -72,6 +72,20 @@
   background: #3898f8e1;
   color: #fdfcfc !important;
 }
+
+.navbar-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.custom-navbar.scrolled .navbar-logo {
+  width: 72px;
+  height: 72px;
+}
+
+
 
 /* =========================
    HAMBURGER ICON SIMPLE
@@ -93,7 +107,7 @@
 }
 
 .custom-navbar.scrolled .hamburger span {
-  background: black;
+  background: #3898f8e1;
 }
 
 .hamburger span:nth-child(1) {
