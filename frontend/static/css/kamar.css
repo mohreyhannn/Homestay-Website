@@ -94,3 +94,11 @@
   transform: scale(1.05);
   color: white;
 }
+
+.kamar-btn,
+.kamar-btn:hover,
+.kamar-btn:focus,
+.kamar-btn:active {
+  text-decoration: none !important;
+  border-bottom: none !important;
+}

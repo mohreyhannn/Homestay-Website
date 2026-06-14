@@ -28,10 +28,8 @@
 
 /* brand */
 .navbar-brand {
-  font-size: 40px;
-  font-weight: 400;
-  color: white !important;
-  transition: 0.3s;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .custom-navbar.scrolled .navbar-brand {
@@ -63,7 +61,7 @@
 
 /* Hover setelah scrol */
 .custom-navbar.scrolled .nav-link {
-  color:  #3898f8e1 !important;
+  color: #3898f8e1 !important;
   font-weight: 500;
 }
 
@@ -74,18 +72,16 @@
 }
 
 .navbar-logo {
-  width: 80px;
-  height: 80px;
+  width: 58px;
+  height: 58px;
   object-fit: contain;
   transition: all 0.3s ease;
 }
 
 .custom-navbar.scrolled .navbar-logo {
-  width: 72px;
-  height: 72px;
+  width: 52px;
+  height: 52px;
 }
-
-
 
 /* =========================
    HAMBURGER ICON SIMPLE
@@ -150,25 +146,25 @@
     display: block;
   }
 
- .nav-box {
-  background: white;
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  border-radius: 15px;
-  width: 260px; /* diperbesar */
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  .nav-box {
+    background: white;
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    width: 260px; /* diperbesar */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 
-  animation: menuFade 0.4s ease;
-}
+    animation: menuFade 0.4s ease;
+  }
 
   .nav-box .nav-link {
     color: rgb(21, 6, 6) !important;
     display: block;
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 15px;
-  margin-bottom: 5px;
-  transition: 0.3s;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 5px;
+    transition: 0.3s;
   }
 
   .nav-box .nav-link:hover {
@@ -176,18 +172,16 @@
     color: #0d6efd !important;
   }
 
-  
-
   @keyframes menuFade {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
+    from {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
   /* =========================
    NAV BOX SAAT SCROLL
 ========================= */
@@ -221,4 +215,34 @@
 .navbar-toggler:active {
   outline: none !important;
   box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+  .cover-section {
+    padding: 120px 20px 60px;
+    align-items: center;
+  }
+
+  .hero-content {
+    text-align: left;
+  }
+
+  .cover-section h1 {
+    font-size: 38px;
+  }
+
+  .cover-section p {
+    font-size: 15px;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .hero-buttons .btn {
+    width: fit-content;
+  }
 }

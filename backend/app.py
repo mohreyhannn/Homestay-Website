@@ -37,6 +37,24 @@ class Booking(db.Model):
     order_id = db.Column(db.String(100))
     total = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+# MODEL KAMAR
+class Room(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama_kamar = db.Column(db.String(100), nullable=False)
+    harga = db.Column(db.Integer, nullable=False)
+    deskripsi = db.Column(db.Text)
+    gambar = db.Column(db.String(255))
+    status = db.Column(db.String(20), default="active")
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    
+# MODEL REVIEW / TANGGAPAN
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.String(100), nullable=False)
+    isi = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     
 def clear_expired():
     expired_time = datetime.now(timezone.utc) - timedelta(hours=1)
@@ -60,6 +78,14 @@ def is_available(room_id, check_in, check_out):
     ).first()
 
     return conflict is None
+
+class RoomReview(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.String(50), nullable=False)
+    nama = db.Column(db.String(100), nullable=False)
+    isi = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 # API ENDPOINTS
 @app.route("/api/booking", methods=["POST"])
@@ -132,11 +158,79 @@ def get_bookings():
 
     return jsonify(result)
 
+@app.route("/api/admin/rooms", methods=["GET"])
+def get_rooms():
+    rooms = Room.query.order_by(Room.id.asc()).all()
+
+    result = []
+    for r in rooms:
+        result.append({
+            "id": r.id,
+            "nama_kamar": r.nama_kamar,
+            "harga": r.harga,
+            "deskripsi": r.deskripsi,
+            "gambar": r.gambar,
+            "status": r.status,
+            "created_at": r.created_at.strftime("%Y-%m-%d %H:%M")
+        })
+
+    return jsonify(result)
+
+
+@app.route("/api/admin/rooms", methods=["POST"])
+def add_room():
+    data = request.json
+
+    room = Room(
+        nama_kamar=data["nama_kamar"],
+        harga=data["harga"],
+        deskripsi=data.get("deskripsi", ""),
+        gambar=data.get("gambar", ""),
+        status=data.get("status", "active")
+    )
+
+    db.session.add(room)
+    db.session.commit()
+
+    return jsonify({"message": "Room berhasil ditambahkan"})
+
+
+@app.route("/api/admin/rooms/<int:id>", methods=["PUT"])
+def update_room(id):
+    data = request.json
+    room = db.session.get(Room, id)
+
+    if not room:
+        return jsonify({"error": "Room tidak ditemukan"}), 404
+
+    room.nama_kamar = data.get("nama_kamar", room.nama_kamar)
+    room.harga = data.get("harga", room.harga)
+    room.deskripsi = data.get("deskripsi", room.deskripsi)
+    room.gambar = data.get("gambar", room.gambar)
+    room.status = data.get("status", room.status)
+
+    db.session.commit()
+
+    return jsonify({"message": "Room berhasil diupdate"})
+
+
+@app.route("/api/admin/rooms/<int:id>", methods=["DELETE"])
+def delete_room(id):
+    room = db.session.get(Room, id)
+
+    if not room:
+        return jsonify({"error": "Room tidak ditemukan"}), 404
+
+    db.session.delete(room)
+    db.session.commit()
+
+    return jsonify({"message": "Room berhasil dihapus"})
+
 @app.route("/api/admin/update-status", methods=["POST"])
 def update_status():
     data = request.json
 
-    booking = Booking.query.get(data["id"])
+    booking = db.session.get(Booking, data["id"])
 
     if not booking:
         return {"error": "Booking tidak ditemukan"}, 404
@@ -167,7 +261,108 @@ def admin_page():
 @app.route("/detail-kamar", methods=["GET"])
 def detail_kamar():
     return render_template("detail-kamar.html")
+
+@app.route("/api/reviews", methods=["GET"])
+def get_reviews():
+    global_reviews = Review.query.all()
+    room_reviews = RoomReview.query.all()
+
+    result = []
+
+    # global
+    for r in global_reviews:
+        result.append({
+            "nama": r.nama,
+            "isi": r.isi,
+            "rating": r.rating,
+            "created_at": r.created_at.strftime("%Y-%m-%d %H:%M")
+        })
+
+    # room review
+    for r in room_reviews:
+        result.append({
+            "nama": r.nama,
+            "isi": r.isi,
+            "rating": r.rating,
+            "room_id": r.room_id,
+            "created_at": r.created_at.strftime("%Y-%m-%d %H:%M")
+        })
+
+    result.sort(key=lambda x: x["created_at"], reverse=True)
+
+    return jsonify(result)
+
+@app.route("/api/reviews", methods=["POST"])
+def add_review():
+    data = request.json
+
+    nama = data.get("nama")
+    isi = data.get("isi")
+    rating = data.get("rating")
+
+    if not nama or not isi or not rating:
+        return {"error": "Nama, tanggapan, dan rating wajib diisi"}, 400
+
+    rating = int(rating)
+
+    if rating < 1 or rating > 5:
+        return {"error": "Rating harus 1 sampai 5"}, 400
+
+    new_review = Review(
+        nama=nama,
+        isi=isi,
+        rating=rating
+    )
+
+    db.session.add(new_review)
+    db.session.commit()
+
+    return {"message": "Review berhasil dikirim"}, 201
     
+@app.route("/api/room-reviews/<room_id>", methods=["GET"])
+def get_room_reviews(room_id):
+    reviews = RoomReview.query.filter_by(room_id=room_id).order_by(RoomReview.created_at.desc()).all()
+
+    return jsonify([
+        {
+            "id": r.id,
+            "room_id": r.room_id,
+            "nama": r.nama,
+            "isi": r.isi,
+            "rating": r.rating,
+            "created_at": r.created_at.strftime("%Y-%m-%d %H:%M")
+        }
+        for r in reviews
+    ])
+    
+@app.route("/api/room-reviews", methods=["POST"])
+def add_room_review():
+    data = request.json
+
+    room_id = data.get("room_id")
+    nama = data.get("nama")
+    isi = data.get("isi")
+    rating = data.get("rating")
+
+    if not room_id or not nama or not isi or not rating:
+        return {"error": "Semua field wajib diisi"}, 400
+
+    rating = int(rating)
+
+    if rating < 1 or rating > 5:
+        return {"error": "Rating harus 1 sampai 5"}, 400
+
+    review = RoomReview(
+        room_id=room_id,
+        nama=nama,
+        isi=isi,
+        rating=rating
+    )
+
+    db.session.add(review)
+    db.session.commit()
+
+    return {"message": "Review kamar berhasil dikirim"}, 201
 # MAIN
 if __name__ == "__main__":
     with app.app_context():

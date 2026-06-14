@@ -1,9 +1,10 @@
+/* =========================
+   GLOBAL
+========================= */
 body {
   background: linear-gradient(135deg, rgb(51, 98, 207), #8595b2);
   font-family: "Segoe UI", sans-serif;
 }
-
-/* SECTION */
 
 .detail-section {
   min-height: 100vh;
@@ -12,215 +13,9 @@ body {
   padding: 40px 0;
 }
 
-/* GAMBAR */
-
-.gambar-wrapper {
-  position: relative;
-  border-radius: 25px;
-  overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-}
-
-.kamar-img {
-  width: 100%;
-  height: 430px;
-  object-fit: cover;
-  transition: 0.6s;
-}
-
-.kamar-img:hover {
-  transform: scale(1.08);
-}
-
-/* BADGE */
-
-.badge-kamar {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: linear-gradient(45deg, #0d6efd, #4dabff);
-  color: white;
-  padding: 8px 18px;
-  border-radius: 30px;
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  display: inline-block;
-  margin-bottom: 10px;
-}
-
-/* TITLE */
-.kamar-title {
-  font-size: 38px;
-  font-weight: 800;
-  margin-bottom: 18px;
-  color: #1d2a4d;
-  line-height: 1.2;
-}
-
-/* RATING */
-.rating-box {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 15px;
-}
-
-.stars {
-  color: #ffc107;
-  font-size: 20px;
-  letter-spacing: 2px;
-}
-
-.rating-text {
-  color: #6c757d;
-  font-size: 14px;
-}
-
-/* HARGA */
-.harga-box {
-  margin: 25px 0;
-  padding: 15px 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-}
-
-.harga {
-  font-size: 40px;
-  font-weight: 800;
-  color: #0d6efd;
-}
-
-.per {
-  color: #6c757d;
-  font-size: 16px;
-}
-
-/* FASILITAS */
-.fasilitas-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.fasilitas-list li {
-  background: white;
-  padding: 14px 16px;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.fasilitas-list li:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-}
-
-/* BUTTON */
-.btn-area {
-  margin-top: 35px;
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  border-radius: 30px;
-  padding: 12px 30px;
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.btn-primary {
-  background: linear-gradient(45deg, #0d6efd, #4dabff);
-  border: none;
-  box-shadow: 0 10px 25px rgba(13, 110, 253, 0.4);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 30px rgba(13, 110, 253, 0.5);
-}
-
-.btn-outline-secondary {
-  border-radius: 30px;
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 992px) {
-  .kamar-title {
-    font-size: 32px;
-  }
-
-  .kamar-img {
-    height: 320px;
-  }
-
-  .fasilitas-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 20px;
-  }
-}
-
-/* GALLERY */
-
-.gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.gallery-main {
-  width: 100%;
-  height: 350px;
-  object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-  transition: 0.5s;
-}
-
-.gallery-main:hover {
-  transform: scale(1.02);
-}
-
-/* GRID FOTO */
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.gallery-grid img {
-  width: 100%;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.gallery-grid img:hover {
-  transform: scale(1.08);
-}
-
-/* FASILITAS ICON */
-.fasilitas-list li::before {
-  color: #0d6efd;
-  font-weight: bold;
-  margin-right: 6px;
-}
-
-/* CARD */
+/* =========================
+   CARD KANAN
+========================= */
 .detail-card {
   background: white;
   padding: 40px;
@@ -229,52 +24,180 @@ body {
   max-width: 520px;
   margin: auto;
   animation: fadeUp 0.8s ease;
+  position: sticky;
+  top: 40px;
+}
+
+.badge-kamar {
+  background: linear-gradient(45deg, #0d6efd, #4dabff);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 18px;
+}
+
+.kamar-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: #1d2a4d;
+}
+
+.rating-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.stars {
+  color: #ffc107;
+}
+
+.rating-text {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.harga-box {
+  margin: 25px 0;
+  padding: 15px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.harga {
+  font-size: 38px;
+  font-weight: 800;
+  color: #0d6efd;
+}
+
+/* =========================
+   FASILITAS
+========================= */
+.fasilitas-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.fasilitas-list li {
+  background: white;
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  font-weight: 500;
+}
+
+/* =========================
+   BUTTON
+========================= */
+.detail-actions {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.btn-booking,
+.btn-back {
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  text-decoration: none !important;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.btn-booking {
+  background: linear-gradient(135deg, #0d6efd, #4dabff);
+  color: white;
+  box-shadow: 0 12px 28px rgba(13, 110, 253, 0.35);
+}
+
+.btn-back {
+  background: #f5f7fb;
+  border: 1px solid #ddd;
+}
+
+.btn-booking:hover,
+.btn-back:hover {
+  transform: translateY(-3px);
+}
+
+/* =========================
+   GALLERY
+========================= */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gallery-main {
+  width: 100%;
+  height: 430px;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
 
 .gallery-thumb {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-top: 12px;
+  gap: 10px;
 }
 
 .gallery-thumb img {
   width: 100%;
   height: 80px;
-  object-fit: cover;
   border-radius: 10px;
+  object-fit: cover;
   cursor: pointer;
+  opacity: 0.75;
   transition: 0.3s;
+  border: 2px solid transparent;
 }
 
 .gallery-thumb img:hover {
-  transform: scale(1.08);
+  opacity: 1;
+  border: 2px solid #0d6efd;
 }
 
-/* REVIEW */
+/* =========================
+   REVIEW CARD
+========================= */
+.review-section {
+  margin-top: 20px;
+}
+
+.review-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: white;
+}
+
 .review-card {
   background: white;
-  padding: 20px;
-  border-radius: 15px;
+  padding: 18px;
+  border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: 0.3s;
-  font-size:14px;
-}
-
-.review-card:hover {
-  transform: translateY(-5px);
+  font-size: 14px;
 }
 
 .review-header {
   display: flex;
-  align-items: center;
   gap: 10px;
   margin-bottom: 10px;
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: #0d6efd;
   color: white;
@@ -284,6 +207,95 @@ body {
   font-weight: bold;
 }
 
+/* =========================
+   FORM REVIEW (UPGRADE)
+========================= */
+.room-review-form {
+  margin-top: 35px;
+  background: rgba(255,255,255,0.97);
+  padding: 30px;
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+.room-review-form h5 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1d2a4d;
+  margin-bottom: 20px;
+}
+
+.room-review-form input,
+.room-review-form textarea {
+  width: 100%;
+  border: none;
+  background: #f4f7fb;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.room-review-form input:focus,
+.room-review-form textarea:focus {
+  background: white;
+  box-shadow: 0 0 0 4px rgba(13,110,253,0.12);
+  outline: none;
+}
+
+.room-review-form textarea {
+  min-height: 120px;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.7;
+}
+.room-rating-input {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.room-rating-input i {
+  font-size: 30px;
+  color: #d0d7e2;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.room-rating-input i:hover,
+.room-rating-input i.active {
+  color: #ffc107;
+  transform: scale(1.15);
+}
+
+.room-rating-input i.active {
+  color: #ffc107;
+}
+
+#sendRoomReview {
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  background: linear-gradient(135deg, #0d6efd, #4dabff);
+  color: white;
+  transition: 0.3s;
+  box-shadow: 0 15px 35px rgba(13,110,253,0.3);
+}
+
+#sendRoomReview:hover {
+  transform: translateY(-3px);
+}
+
+/* =========================
+   ANIMATION
+========================= */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -295,216 +307,69 @@ body {
   }
 }
 
-/* BOOKING BOX */
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 992px) {
+  .detail-card {
+    position: static;
+  }
 
-.booking-box{
-margin-top:25px;
-background:white;
-padding:25px;
-border-radius:15px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  .detail-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-main {
+    height: 300px;
+  }
 }
 
-.booking-box h5{
-font-weight:700;
-margin-bottom:15px;
+/* =========================
+   REVIEW HORIZONTAL SCROLL
+========================= */
+.room-review-scroll {
+  display: flex;
+  gap: 18px;
+  overflow: hidden;
+  padding: 8px 0;
+  position: relative;
+  scroll-behavior: smooth;
 }
 
-.booking-info{
-background:#f8f9ff;
-padding:15px;
-border-radius:10px;
-margin-top:15px;
+.room-review-scroll::-webkit-scrollbar {
+  height: 8px;
 }
 
-.booking-info p{
-margin:5px 0;
-font-weight:500;
+.room-review-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
 }
 
-.total-harga{
-font-size:20px;
-font-weight:700;
-color:#0d6efd;
+.room-review-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 20px;
 }
 
-/* REVIEW SECTION */
-
-.review-section{
-margin-top:20px;
+.room-review-scroll .review-card {
+  flex: 0 0 300px;
+  min-height: 170px;
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  transition: 0.3s;
 }
 
-.review-title{
-font-size:34px;
-font-weight:800;
-background:linear-gradient(45deg,#f5f5f7,#fbfcfd);
--webkit-background-clip:text;
-color:transparent;
+.room-review-scroll .review-card:hover {
+  transform: translateY(-5px);
 }
 
-
-/* GRID REVIEW */
-
-.review-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
+.room-review-scroll .review-card p {
+  margin-top: 12px;
+  color: #555;
+  line-height: 1.6;
 }
 
-.payment-box{
-background:#f8f9fa;
-padding:15px;
-border-radius:12px;
-}
-
-.transfer-box{
-background:#ffffff;
-padding:15px;
-border-radius:12px;
-margin-top:15px;
-display:none;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-.payment-section{
-margin-top:20px;
-}
-
-.payment-method{
-display:flex;
-gap:15px;
-margin-top:10px;
-}
-
-
-.payment-card input{
-display:none;
-}
-
-.card-content{
-border:2px solid #ddd;
-padding:15px;
-border-radius:10px;
-text-align:center;
-font-weight:bold;
-background:white;
-transition:0.2s;
-}
-
-.payment-card input:checked + .card-content{
-border-color:#2ecc71;
-background:#eafaf1;
-}
-
-/* transfer options */
-
-#transferOptions{
-margin-top:20px;
-display:none;
-}
-
-.bank-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-margin-top:10px;
-}
-
-.bank-card{
-cursor:pointer;
-text-align:center;
-border:2px solid #ddd;
-padding:10px;
-border-radius:10px;
-background:white;
-transition:0.2s;
-}
-
-.bank-card input{
-display:none;
-}
-
-.bank-card img{
-width:50px;
-height:50px;
-object-fit:contain;
-}
-
-.bank-card p{
-margin-top:5px;
-font-size:14px;
-}
-
-.bank-card input:checked + img{
-transform:scale(1.1);
-}
-
-.bank-card input:checked ~ p{
-color:#27ae60;
-font-weight:bold;
-}
-
-.bank-card input:checked{
-accent-color:#27ae60;
-}
-
-.bank-card:has(input:checked){
-border-color:#27ae60;
-background:#eafaf1;
-}
-
-/* GRID PAYMENT */
-.payment-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-}
-
-/* CARD PAYMENT */
-
-.payment-option input{
-display:none;
-}
-
-.payment-card{
-background:white;
-border-radius:15px;
-padding:18px;
-text-align:center;
-border:2px solid #eee;
-cursor:pointer;
-transition:all 0.3s ease;
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:8px;
-box-shadow:0 5px 15px rgba(0,0,0,0.08);
-}
-
-.payment-card img{
-width:45px;
-height:45px;
-object-fit:contain;
-}
-
-.payment-card span{
-font-weight:600;
-font-size:14px;
-color:#333;
-}
-
-/* hover */
-
-.payment-card:hover{
-transform:translateY(-5px);
-box-shadow:0 12px 25px rgba(0,0,0,0.15);
-}
-
-/* selected */
-
-.payment-option input:checked + .payment-card{
-border-color:#0d6efd;
-background:linear-gradient(135deg,#eef4ff,#ffffff);
-box-shadow:0 10px 30px rgba(13,110,253,0.3);
-transform:scale(1.05);
+.empty-review {
+  flex: 0 0 100%;
 }

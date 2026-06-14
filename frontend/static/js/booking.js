@@ -1,12 +1,12 @@
 // ======================
 // AMBIL PARAMETER
 // ======================
-const params = new URLSearchParams(globalThis.location.search);
+const params = new URLSearchParams(window.location.search);
 const kamar = params.get("kamar");
 
 if (!kamar) {
   alert("Kamar tidak ditemukan!");
-  globalThis.location.href = "index.html";
+  window.location.href = "/";
 }
 
 // ======================
@@ -22,37 +22,80 @@ const kamarData = data[kamar];
 
 if (!kamarData) {
   alert("Data kamar tidak valid!");
-  globalThis.location.href = "index.html";
+  window.location.href = "/";
 }
-
-// ======================
-// TAMPILKAN DATA
-// ======================
-const namaEl = document.getElementById("namaKamar");
-const hargaEl = document.getElementById("hargaKamar");
-
-if (namaEl && hargaEl) {
-  namaEl.innerText = kamarData.nama;
-  hargaEl.innerText = kamarData.harga;
-}
-
-// ======================
-// HARGA
-// ======================
-const hargaPerMalam = Number.parseInt(
-  kamarData.harga.replaceAll(/[^\d]/g, "")
-);
 
 // ======================
 // ELEMENT
 // ======================
+const btnKembali = document.getElementById("btnKembali");
+const namaEl = document.getElementById("namaKamar");
+const hargaEl = document.getElementById("hargaKamar");
 const tanggal = document.getElementById("tanggal");
 const totalMalam = document.getElementById("totalMalam");
 const totalHarga = document.getElementById("totalHarga");
 const btnPesan = document.getElementById("btnPesan");
 
-// disable awal
+const hargaPerMalam = Number.parseInt(kamarData.harga.replaceAll(/[^\d]/g, ""));
+
+if (btnKembali) {
+  btnKembali.href = `/detail-kamar?kamar=${kamar}`;
+}
+
+if (namaEl) namaEl.innerText = kamarData.nama;
+if (hargaEl) hargaEl.innerText = kamarData.harga;
+
 btnPesan.disabled = true;
+
+// ======================
+// TOAST FALLBACK
+// ======================
+function notify(message, type = "success") {
+  if (typeof showToast === "function") {
+    showToast(message, type);
+  } else {
+    alert(message);
+  }
+}
+
+// ======================
+// MODAL BOOKING
+// ======================
+function showBookingModal(detailHTML, onConfirm) {
+  const modal = document.createElement("div");
+  modal.className = "booking-modal-overlay";
+
+  modal.innerHTML = `
+    <div class="booking-modal">
+      <div class="booking-modal-icon">✓</div>
+
+      <h3>Cek Detail Pesanan</h3>
+      <p class="booking-modal-subtitle">
+        Pastikan data booking kamu sudah benar sebelum lanjut ke WhatsApp.
+      </p>
+
+      <div class="booking-modal-detail">
+        ${detailHTML}
+      </div>
+
+      <div class="booking-modal-actions">
+        <button type="button" class="booking-modal-cancel">Cek Lagi</button>
+        <button type="button" class="booking-modal-confirm">Lanjut WhatsApp</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal.querySelector(".booking-modal-cancel").addEventListener("click", () => {
+    modal.remove();
+  });
+
+  modal.querySelector(".booking-modal-confirm").addEventListener("click", async () => {
+    modal.remove();
+    await onConfirm();
+  });
+}
 
 // ======================
 // FUNGSI TANGGAL
@@ -79,28 +122,24 @@ function hitungBooking() {
   const tglKeluar = new Date(dataTanggal.checkout);
 
   if (tglKeluar <= tglMasuk) {
-    alert("Tanggal checkout harus setelah checkin");
+    notify("Tanggal checkout harus setelah check-in", "error");
     btnPesan.disabled = true;
     return;
   }
 
   const malam = (tglKeluar - tglMasuk) / (1000 * 60 * 60 * 24);
-  totalMalam.innerText = malam;
-
   const total = malam * hargaPerMalam;
+
+  totalMalam.innerText = malam;
   totalHarga.innerText = "Rp " + total.toLocaleString("id-ID");
 
   document.getElementById("sumKamar").innerText = kamarData.nama;
+  document.getElementById("sumTanggal").innerText =
+    `${dataTanggal.checkin} - ${dataTanggal.checkout}`;
+  document.getElementById("sumMalam").innerText = malam;
+  document.getElementById("sumHarga").innerText =
+    "Rp " + total.toLocaleString("id-ID");
 
-document.getElementById("sumTanggal").innerText =
-  dataTanggal.checkin + " - " + dataTanggal.checkout;
-
-document.getElementById("sumMalam").innerText = malam;
-
-document.getElementById("sumHarga").innerText =
-  "Rp " + total.toLocaleString("id-ID");
-
-  // aktifkan tombol kalau valid
   btnPesan.disabled = malam <= 0;
 }
 
@@ -109,7 +148,7 @@ document.getElementById("sumHarga").innerText =
 // ======================
 async function initCalendar() {
   try {
-    const res = await fetch(`http://localhost:5000/api/booked/${kamar}`);
+    const res = await fetch(`/api/booked/${kamar}`);
     const bookedDates = await res.json();
 
     flatpickr("#tanggal", {
@@ -117,34 +156,32 @@ async function initCalendar() {
       dateFormat: "Y-m-d",
       disable: bookedDates,
       minDate: "today",
-      onChange: hitungBooking
+      onChange: hitungBooking,
+      onClose: hitungBooking
     });
-
   } catch (error) {
     console.warn("Gagal ambil tanggal booking:", error);
 
     flatpickr("#tanggal", {
       mode: "range",
       dateFormat: "Y-m-d",
-      onChange: hitungBooking
+      minDate: "today",
+      onChange: hitungBooking,
+      onClose: hitungBooking
     });
   }
 }
 
-// panggil sekali saja
 initCalendar();
 
 // ======================
 // BUTTON PESAN
 // ======================
-btnPesan.addEventListener("click", async function () {
-  btnPesan.disabled = true;
-  btnPesan.innerText = "Mengalihkan ke WhatsApp...";
-
+btnPesan.addEventListener("click", function () {
   const dataTanggal = getTanggal();
 
   if (!dataTanggal) {
-    alert("Pilih tanggal dulu!");
+    notify("Pilih tanggal dulu", "info");
     return;
   }
 
@@ -152,55 +189,84 @@ btnPesan.addEventListener("click", async function () {
   const tglKeluar = new Date(dataTanggal.checkout);
 
   if (tglKeluar <= tglMasuk) {
-    alert("Tanggal tidak valid!");
+    notify("Tanggal tidak valid", "error");
     return;
   }
 
   const malam = Number(totalMalam.innerText);
-  if (malam <= 0) {
-    alert("Pilih tanggal yang benar!");
-    return;
-  }
+  const total = Number.parseInt(totalHarga.innerText.replace(/\D/g, ""), 10);
 
-  const total = Number.parseInt(
-    totalHarga.innerText.replace(/\D/g, ""), 
-    10
-  );
+  const detailHTML = `
+    <div class="booking-detail-row">
+      <span>Kamar</span>
+      <b>${kamarData.nama}</b>
+    </div>
+    <div class="booking-detail-row">
+      <span>Check-in</span>
+      <b>${dataTanggal.checkin}</b>
+    </div>
+    <div class="booking-detail-row">
+      <span>Check-out</span>
+      <b>${dataTanggal.checkout}</b>
+    </div>
+    <div class="booking-detail-row">
+      <span>Total Malam</span>
+      <b>${malam} malam</b>
+    </div>
+    <div class="booking-detail-row total">
+      <span>Total Harga</span>
+      <b>Rp ${total.toLocaleString("id-ID")}</b>
+    </div>
+  `;
 
-  try {
-    // ✅ SIMPAN KE DATABASE
-    const res = await fetch("http://localhost:5000/api/booking", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        room_id: kamar,
-        check_in: dataTanggal.checkin,
-        check_out: dataTanggal.checkout,
-        total: total
-      })
-    });
+  showBookingModal(detailHTML, async function () {
+    btnPesan.disabled = true;
+    btnPesan.innerText = "Memproses...";
 
-    const result = await res.json();
+    try {
+      const res = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          room_id: kamar,
+          check_in: dataTanggal.checkin,
+          check_out: dataTanggal.checkout,
+          total: total
+        })
+      });
 
-    if (result.error) {
-      alert(result.error);
-      return;
-    }
+      const result = await res.json();
 
-    // ✅ BUAT PESAN WA
-    const message = `Halo, saya ingin booking:
+      if (result.error) {
+        notify(result.error, "error");
+        btnPesan.disabled = false;
+        btnPesan.innerText = "Konfirmasi via WhatsApp";
+        return;
+      }
+
+      
+
+      const message = `Halo, saya ingin booking:
+
 Kamar: ${kamarData.nama}
-Tanggal: ${dataTanggal.checkin} - ${dataTanggal.checkout}
-Total: Rp ${total.toLocaleString("id-ID")}`;
+Check-in: ${dataTanggal.checkin}
+Check-out: ${dataTanggal.checkout}
+Total malam: ${malam} malam
+Total harga: Rp ${total.toLocaleString("id-ID")}
+Order ID: ${result.order_id}
 
-    const waLink = `https://wa.me/628558038659?text=${encodeURIComponent(message)}`;
+Mohon konfirmasi ketersediaannya.`;
 
-    // ✅ REDIRECT KE WA
-    window.location.href = waLink;
+      setTimeout(() => {
+        const waLink = `https://wa.me/628558038659?text=${encodeURIComponent(message)}`;
+        window.location.href = waLink;
+      }, 800);
 
-  } catch (error) {
-    console.error(error);
-    alert("Gagal booking");
-  }
+    } catch (error) {
+      console.error(error);
+      notify("Gagal booking", "error");
+      btnPesan.disabled = false;
+      btnPesan.innerText = "Konfirmasi via WhatsApp";
+    }
+  });
 });
-
