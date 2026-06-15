@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Booking Saya</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/my-bookings.css') }}">
+</head>
+<body>
+  <main class="booking-page">
+    <section class="booking-card">
+      <div class="booking-header">
+        <div>
+          <h1>Booking Saya</h1>
+          <p>Daftar riwayat pemesanan kamar Anda.</p>
+        </div>
+
+        <a href="/" class="back-btn">Kembali</a>
+      </div>
+
+      <div id="myBookingList" class="booking-list">
+        <p class="loading">Memuat data booking...</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/my-bookings.js') }}"></script>
+</body>
+</html>

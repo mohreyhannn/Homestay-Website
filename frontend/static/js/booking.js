@@ -10,22 +10,6 @@ if (!kamar) {
 }
 
 // ======================
-// DATA KAMAR
-// ======================
-const data = {
-  standard: { nama: "Kamar Standard", harga: "Rp 250.000" },
-  "1kamar": { nama: "Kamar 1 Bedroom", harga: "Rp 300.000" },
-  "2kamar": { nama: "Kamar 2 Bedroom", harga: "Rp 350.000" }
-};
-
-const kamarData = data[kamar];
-
-if (!kamarData) {
-  alert("Data kamar tidak valid!");
-  window.location.href = "/";
-}
-
-// ======================
 // ELEMENT
 // ======================
 const btnKembali = document.getElementById("btnKembali");
@@ -36,16 +20,14 @@ const totalMalam = document.getElementById("totalMalam");
 const totalHarga = document.getElementById("totalHarga");
 const btnPesan = document.getElementById("btnPesan");
 
-const hargaPerMalam = Number.parseInt(kamarData.harga.replaceAll(/[^\d]/g, ""));
+let kamarData = null;
+let hargaPerMalam = 0;
+
+if (btnPesan) btnPesan.disabled = true;
 
 if (btnKembali) {
   btnKembali.href = `/detail-kamar?kamar=${kamar}`;
 }
-
-if (namaEl) namaEl.innerText = kamarData.nama;
-if (hargaEl) hargaEl.innerText = kamarData.harga;
-
-btnPesan.disabled = true;
 
 // ======================
 // TOAST FALLBACK
@@ -55,6 +37,39 @@ function notify(message, type = "success") {
     showToast(message, type);
   } else {
     alert(message);
+  }
+}
+
+// ======================
+// LOAD ROOM DETAIL
+// ======================
+async function loadRoomDetail() {
+  try {
+    const res = await fetch(`/api/rooms/${kamar}`);
+
+    if (!res.ok) {
+      throw new Error("Room tidak ditemukan");
+    }
+
+    kamarData = await res.json();
+
+    hargaPerMalam = Number(kamarData.harga || 0);
+
+    if (namaEl) namaEl.innerText = kamarData.nama_kamar;
+
+    if (hargaEl) {
+      hargaEl.innerText =
+        "Rp " + hargaPerMalam.toLocaleString("id-ID");
+    }
+
+    const sumKamar = document.getElementById("sumKamar");
+    if (sumKamar) sumKamar.innerText = kamarData.nama_kamar;
+
+    await initCalendar();
+  } catch (error) {
+    console.error(error);
+    notify("Data kamar gagal dimuat", "error");
+    window.location.href = "/";
   }
 }
 
@@ -101,19 +116,21 @@ function showBookingModal(detailHTML, onConfirm) {
 // FUNGSI TANGGAL
 // ======================
 function getTanggal() {
+  if (!tanggal.value) return null;
+
   const dates = tanggal.value.split(" to ");
   if (dates.length < 2) return null;
 
   return {
     checkin: dates[0],
-    checkout: dates[1]
+    checkout: dates[1],
   };
 }
 
 function hitungBooking() {
   const dataTanggal = getTanggal();
 
-  if (!dataTanggal) {
+  if (!dataTanggal || !kamarData) {
     btnPesan.disabled = true;
     return;
   }
@@ -133,7 +150,7 @@ function hitungBooking() {
   totalMalam.innerText = malam;
   totalHarga.innerText = "Rp " + total.toLocaleString("id-ID");
 
-  document.getElementById("sumKamar").innerText = kamarData.nama;
+  document.getElementById("sumKamar").innerText = kamarData.nama_kamar;
   document.getElementById("sumTanggal").innerText =
     `${dataTanggal.checkin} - ${dataTanggal.checkout}`;
   document.getElementById("sumMalam").innerText = malam;
@@ -157,7 +174,7 @@ async function initCalendar() {
       disable: bookedDates,
       minDate: "today",
       onChange: hitungBooking,
-      onClose: hitungBooking
+      onClose: hitungBooking,
     });
   } catch (error) {
     console.warn("Gagal ambil tanggal booking:", error);
@@ -167,18 +184,21 @@ async function initCalendar() {
       dateFormat: "Y-m-d",
       minDate: "today",
       onChange: hitungBooking,
-      onClose: hitungBooking
+      onClose: hitungBooking,
     });
   }
 }
-
-initCalendar();
 
 // ======================
 // BUTTON PESAN
 // ======================
 btnPesan.addEventListener("click", function () {
   const dataTanggal = getTanggal();
+
+  if (!kamarData) {
+    notify("Data kamar belum siap", "error");
+    return;
+  }
 
   if (!dataTanggal) {
     notify("Pilih tanggal dulu", "info");
@@ -199,7 +219,7 @@ btnPesan.addEventListener("click", function () {
   const detailHTML = `
     <div class="booking-detail-row">
       <span>Kamar</span>
-      <b>${kamarData.nama}</b>
+      <b>${kamarData.nama_kamar}</b>
     </div>
     <div class="booking-detail-row">
       <span>Check-in</span>
@@ -231,8 +251,8 @@ btnPesan.addEventListener("click", function () {
           room_id: kamar,
           check_in: dataTanggal.checkin,
           check_out: dataTanggal.checkout,
-          total: total
-        })
+          total: total,
+        }),
       });
 
       const result = await res.json();
@@ -244,11 +264,9 @@ btnPesan.addEventListener("click", function () {
         return;
       }
 
-      
-
       const message = `Halo, saya ingin booking:
 
-Kamar: ${kamarData.nama}
+Kamar: ${kamarData.nama_kamar}
 Check-in: ${dataTanggal.checkin}
 Check-out: ${dataTanggal.checkout}
 Total malam: ${malam} malam
@@ -261,7 +279,6 @@ Mohon konfirmasi ketersediaannya.`;
         const waLink = `https://wa.me/628558038659?text=${encodeURIComponent(message)}`;
         window.location.href = waLink;
       }, 800);
-
     } catch (error) {
       console.error(error);
       notify("Gagal booking", "error");
@@ -270,3 +287,8 @@ Mohon konfirmasi ketersediaannya.`;
     }
   });
 });
+
+// ======================
+// INIT
+// ======================
+loadRoomDetail();

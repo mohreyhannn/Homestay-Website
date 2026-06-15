@@ -3,6 +3,7 @@ import {
   BedDouble,
   CalendarDays,
   Settings,
+  Users,
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -22,6 +23,11 @@ const menuItems = [
     name: "Rooms",
     path: "/rooms",
     icon: BedDouble,
+  },
+  {
+    name: "Users",
+    path: "/users",
+    icon: Users,
   },
   {
     name: "Settings",

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import BookingDetailModal from "./BookingDetailModal";
+import Swal from "sweetalert2";
 
 const getStatusStyle = (status) => {
   switch (status) {
@@ -22,7 +23,16 @@ export default function RecentBookings({
 }) {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const handleUpdateStatus = async (id, status) => {
-    if (!globalThis.confirm("Update status?")) return;
+    const result = await Swal.fire({
+      title: "Update Status?",
+      text: "Status booking akan diperbarui.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Update",
+      cancelButtonText: "Batal",
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       const res = await fetch("http://127.0.0.1:5000/api/admin/update-status", {

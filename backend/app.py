@@ -1,12 +1,15 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask import render_template
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import uuid
 import midtransclient
 import os
+
 
 snap = midtransclient.Snap(
     is_production=False,
@@ -21,15 +24,27 @@ app = Flask(
     static_folder="../frontend/static"
 )
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
 
 db = SQLAlchemy(app)
 CORS(app)
+
+UPLOAD_FOLDER = os.path.join(
+    os.path.dirname(__file__),
+    "../frontend/static/images"
+)
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 
 # MODEL BOOKING
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     room_id = db.Column(db.String(50))
     check_in = db.Column(db.Date)
     check_out = db.Column(db.Date)
@@ -37,7 +52,6 @@ class Booking(db.Model):
     order_id = db.Column(db.String(100))
     total = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-
 # MODEL KAMAR
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,6 +60,15 @@ class Room(db.Model):
     deskripsi = db.Column(db.Text)
     gambar = db.Column(db.String(255))
     status = db.Column(db.String(20), default="active")
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+
+#MODEL USER
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nama = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(20), default="customer")
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     
 # MODEL REVIEW / TANGGAPAN
@@ -108,7 +131,11 @@ def booking():
 
     order_id = str(uuid.uuid4())
 
+    if "user_id" not in session:
+        return {"error": "Silakan login terlebih dahulu"}, 401
+
     new_booking = Booking(
+        user_id=session["user_id"],
         room_id=data['room_id'],
         check_in=check_in,
         check_out=check_out,
@@ -157,6 +184,39 @@ def get_bookings():
         })
 
     return jsonify(result)
+
+@app.route("/api/rooms", methods=["GET"])
+def public_rooms():
+    rooms = Room.query.filter_by(status="active").order_by(Room.id.asc()).all()
+
+    result = []
+    for r in rooms:
+        result.append({
+            "id": r.id,
+            "nama_kamar": r.nama_kamar,
+            "harga": r.harga,
+            "deskripsi": r.deskripsi,
+            "gambar": r.gambar,
+            "status": r.status
+        })
+
+    return jsonify(result)
+
+@app.route("/api/rooms/<int:id>", methods=["GET"])
+def public_room_detail(id):
+    room = db.session.get(Room, id)
+
+    if not room:
+        return jsonify({"error": "Room tidak ditemukan"}), 404
+
+    return jsonify({
+        "id": room.id,
+        "nama_kamar": room.nama_kamar,
+        "harga": room.harga,
+        "deskripsi": room.deskripsi,
+        "gambar": room.gambar,
+        "status": room.status
+    })
 
 @app.route("/api/admin/rooms", methods=["GET"])
 def get_rooms():
@@ -226,6 +286,29 @@ def delete_room(id):
 
     return jsonify({"message": "Room berhasil dihapus"})
 
+@app.route("/api/admin/upload-room-image", methods=["POST"])
+def upload_room_image():
+    if "image" not in request.files:
+        return jsonify({"error": "Tidak ada file gambar"}), 400
+
+    file = request.files["image"]
+
+    if file.filename == "":
+        return jsonify({"error": "Nama file kosong"}), 400
+
+    if not allowed_file(file.filename):
+        return jsonify({"error": "Format file tidak didukung"}), 400
+
+    filename = secure_filename(file.filename)
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
+
+    file.save(filepath)
+
+    return jsonify({
+        "message": "Upload berhasil",
+        "filename": filename
+    })
+
 @app.route("/api/admin/update-status", methods=["POST"])
 def update_status():
     data = request.json
@@ -246,13 +329,176 @@ def reset():
     db.session.commit()
     return {"message": "Database direset"}
 
+@app.route("/api/admin/users", methods=["GET"])
+def get_users():
+    users = User.query.order_by(User.created_at.desc()).all()
+
+    result = []
+    for u in users:
+        result.append({
+            "id": u.id,
+            "nama": u.nama,
+            "email": u.email,
+            "role": u.role,
+            "created_at": u.created_at.strftime("%Y-%m-%d %H:%M")
+        })
+
+    return jsonify(result)
+
+
+@app.route("/api/admin/users/<int:id>/role", methods=["PUT"])
+def update_user_role(id):
+    data = request.json
+    user = db.session.get(User, id)
+
+    if not user:
+        return jsonify({"error": "User tidak ditemukan"}), 404
+
+    user.role = data.get("role", user.role)
+    db.session.commit()
+
+    return jsonify({"message": "Role user berhasil diupdate"})
+
+
+@app.route("/api/admin/users/<int:id>", methods=["DELETE"])
+def delete_user(id):
+    user = db.session.get(User, id)
+
+    if not user:
+        return jsonify({"error": "User tidak ditemukan"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": "User berhasil dihapus"})
+
 @app.route("/", methods=["GET"])
 def home():
     return render_template("index.html")
 
+@app.route("/api/register", methods=["POST"])
+def register():
+    data = request.json
+
+    nama = data.get("nama")
+    email = data.get("email")
+    password = data.get("password")
+
+    if not nama or not email or not password:
+        return jsonify({"error": "Nama, email, dan password wajib diisi"}), 400
+
+    existing_user = User.query.filter_by(email=email).first()
+
+    if existing_user:
+        return jsonify({"error": "Email sudah terdaftar"}), 400
+
+    new_user = User(
+        nama=nama,
+        email=email,
+        password=generate_password_hash(password),
+        role="customer"
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"message": "Register berhasil"}), 201
+
+
+@app.route("/api/login", methods=["POST"])
+def login():
+    data = request.json
+
+    email = data.get("email")
+    password = data.get("password")
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not check_password_hash(user.password, password):
+        return jsonify({"error": "Email atau password salah"}), 401
+
+    session["user_id"] = user.id
+    session["user_name"] = user.nama
+    session["role"] = user.role
+
+    return jsonify({
+        "message": "Login berhasil",
+        "user": {
+            "id": user.id,
+            "nama": user.nama,
+            "email": user.email,
+            "role": user.role
+        }
+    })
+
+
+@app.route("/api/me", methods=["GET"])
+def me():
+    if "user_id" not in session:
+        return jsonify({"logged_in": False}), 401
+
+    return jsonify({
+        "logged_in": True,
+        "user": {
+            "id": session["user_id"],
+            "nama": session["user_name"],
+            "role": session["role"]
+        }
+    })
+
+
+@app.route("/api/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return jsonify({"message": "Logout berhasil"})
+
+@app.route("/login", methods=["GET"])
+def login_page():
+    return render_template("login.html")
+
+
+@app.route("/register", methods=["GET"])
+def register_page():
+    return render_template("register.html")
+
 @app.route("/booking", methods=["GET"])
-def booking_page():   # ← beda nama
+def booking_page():
+    if "user_id" not in session:
+        return redirect("/login")
+
     return render_template("booking.html")
+
+@app.route("/my-bookings", methods=["GET"])
+def my_bookings_page():
+    return render_template("my-bookings.html")
+
+@app.route("/api/my-bookings", methods=["GET"])
+def my_bookings():
+    if "user_id" not in session:
+        return jsonify({"error": "Silakan login terlebih dahulu"}), 401
+
+    bookings = Booking.query.filter_by(user_id=session["user_id"]) \
+        .order_by(Booking.created_at.desc()) \
+        .all()
+
+    result = []
+
+    for b in bookings:
+        room = db.session.get(Room, int(b.room_id)) if b.room_id else None
+
+        result.append({
+            "id": b.id,
+            "room_id": b.room_id,
+            "room_name": room.nama_kamar if room else f"Room {b.room_id}",
+            "check_in": b.check_in.strftime("%Y-%m-%d"),
+            "check_out": b.check_out.strftime("%Y-%m-%d"),
+            "status": b.status,
+            "total": b.total,
+            "order_id": b.order_id,
+            "created_at": b.created_at.strftime("%Y-%m-%d %H:%M")
+        })
+
+    return jsonify(result)
 
 @app.route("/admin", methods=["GET"])
 def admin_page():

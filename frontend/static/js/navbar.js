@@ -29,3 +29,27 @@ window.addEventListener("scroll", () => {
     }
   }
 });
+
+const navbarCollapse = document.querySelector(".navbar-collapse");
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+
+if (navbarCollapse && hamburgerBtn) {
+  // SOLUSI 1: klik area luar menu = menu tertutup
+  document.addEventListener("click", (e) => {
+    const clickedInsideMenu = navbarCollapse.contains(e.target);
+    const clickedHamburger = hamburgerBtn.contains(e.target);
+
+    if (!clickedInsideMenu && !clickedHamburger) {
+      navbarCollapse.classList.remove("show");
+      hamburgerBtn.classList.remove("active");
+    }
+  });
+
+  // SOLUSI 2: klik link di mobile menu = menu tertutup
+  document.querySelectorAll(".mobile-menu .nav-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      navbarCollapse.classList.remove("show");
+      hamburgerBtn.classList.remove("active");
+    });
+  });
+}
